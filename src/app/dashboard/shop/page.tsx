@@ -1,7 +1,7 @@
 'use client'
 
 import { Display, Grid } from '@/components/display'
-import shopItems from '@/constant/shopItems'
+import shopItems from '@/constants/shopItems'
 import { useShop } from '@/contexts/shopContext'
 import { Button, Card, CardBody, CardHeader, Image } from '@nextui-org/react'
 

@@ -174,7 +174,8 @@ export default function DashboardLayout({
             </Modal>
 
             <Container flexDecoration="col" className="w-full h-full">
-                {pathname.startsWith('/dashboard/doc') ? (
+                {pathname.startsWith('/dashboard/doc') ||
+                pathname.startsWith('/dashboard/blog/') ? (
                     <></>
                 ) : (
                     <Container className="w-[100%] h-[10vh] fixed right-0 z-50">
@@ -235,13 +236,12 @@ export default function DashboardLayout({
                                 })}
 
                                 <NavbarItem>
-                                    <div
+                                    <button
                                         className="bg-default-200 rounded-lg text-[20px] p-2 transition-all hover:scale-[1.1]"
-                                        role="button"
                                         aria-labelledby="button_"
                                         onClick={onOpen}>
                                         <BiBell />
-                                    </div>
+                                    </button>
                                 </NavbarItem>
                             </NavbarContent>
                             <NavbarMenu>

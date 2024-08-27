@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { Inter } from 'next/font/google'
 import { NextUIProvider } from '@nextui-org/react'
 import AuthProvider from '@/contexts/authProvider'
 import { Analytics } from '@vercel/analytics/react'
@@ -11,6 +12,8 @@ import './globals.css'
 export const metadata: Metadata = {
     title: 'Content Gleam',
     description: 'Generated AI Content',
+    keywords:
+        'AI content generation, AI writing tools, automated content creation, AI content creator, content marketing, SEO content, blog writing AI, social media content, content automation, AI-driven content, machine learning content creation, GPT-4 content, AI image generation, creative AI, content optimization, digital marketing, AI content platform, online content tools, smart content creation, AI-powered content, content generation software',
     manifest: 'https://contentgleam.vercel.app/manifest.json',
     openGraph: {
         title: 'Content Gleam',
@@ -39,10 +42,12 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
+    maximumScale: 5, // Allowing zoom up to 500%
+    userScalable: false, // Allowing users to zoom
     themeColor: '#180828'
 }
+
+const inter = Inter({ subsets: ['latin'], weight: '300' })
 
 export default function RootLayout({
     children
@@ -51,7 +56,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body>
+            <body className={inter.className}>
                 <AuthProvider>
                     <NextUIProvider>
                         <ControllerProvider>

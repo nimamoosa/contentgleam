@@ -1,4 +1,4 @@
-import replace from '@/constant/replacements'
+import replace from '@/constants/replacements'
 import processBotResponse from '@/functions/processBot'
 import updateChats from '@/functions/updateChats'
 import { AuthTypes } from '@/types/auth'

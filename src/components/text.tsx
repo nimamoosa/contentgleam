@@ -1,5 +1,7 @@
 import { Colors } from '@/utils/color'
 import React from 'react'
+import classNames from 'classnames'
+import { TagManager } from './common/tagManager'
 
 interface TextComponentProps {
     message: string
@@ -12,14 +14,13 @@ const TextComponent: React.FC<TextComponentProps> = ({
     id,
     className
 }) => {
-    const processMessage = (message: string) => {
-        message = message.trim()
+    const tagManager = new TagManager()
 
+    const processMessage = (message: string): React.ReactNode[] => {
         const regex = /<([a-zA-Z]+)(?:-(\d+))?>((?:.|\n)*?)<\/\1(?:-\d+)?>/g
         let lastIndex = 0
         const parts: React.ReactNode[] = []
 
-        // Update the replace function to correctly handle the match parameters
         message.replace(
             regex,
             (
@@ -29,38 +30,43 @@ const TextComponent: React.FC<TextComponentProps> = ({
                 content: string,
                 offset: number
             ) => {
-                // Push the text before the match
+                // Add text before the match
                 parts.push(message.substring(lastIndex, offset))
 
-                let styleColor: string | undefined
+                // Process the nested content
+                const processedContent = processMessage(content)
 
-                if (tag) {
-                    if (variant) {
-                        styleColor = Colors[tag.toLowerCase()]?.[variant]
-                    } else {
-                        styleColor = Colors[tag.toLowerCase()]?.['def']
-                    }
-                }
+                // Get the styles and classnames for the current tag
+                const tagStyle = tagManager.getTagStyle(tag)
+                const styleColor = variant
+                    ? Colors[tag.toLowerCase()]?.[variant]
+                    : Colors[tag.toLowerCase()]?.['def']
 
-                // Push the matched element with the proper span
-                if (styleColor) {
-                    parts.push(
-                        <span key={offset} style={{ color: styleColor }}>
-                            {content}
-                        </span>
-                    )
-                } else {
-                    // If no color class is found, push the original match
-                    parts.push(match)
-                }
+                const combinedStyle = styleColor
+                    ? { color: styleColor }
+                    : undefined
+                const combinedClassName = classNames(tagStyle?.className)
 
-                // Update lastIndex to the end of the matched element
+                // Combine everything into one wrapper element
+                const Wrapper = tagStyle?.wrapper || 'span'
+
+                parts.push(
+                    <Wrapper
+                        key={offset}
+                        className={combinedClassName}
+                        style={combinedStyle}>
+                        {processedContent}
+                    </Wrapper>
+                )
+
+                // Update lastIndex
                 lastIndex = offset + match.length
-                return match // This return is required for replace
+
+                return match
             }
         )
 
-        // Push the remaining text after the last match
+        // Add any remaining text after the last match
         if (lastIndex < message.length) {
             parts.push(message.substring(lastIndex))
         }
@@ -69,7 +75,9 @@ const TextComponent: React.FC<TextComponentProps> = ({
     }
 
     return (
-        <span id={id} className={className}>
+        <span
+            id={id}
+            className={classNames('max-sm:whitespace-normal', className)}>
             {processMessage(message)}
         </span>
     )
