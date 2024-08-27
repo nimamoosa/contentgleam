@@ -71,10 +71,10 @@ const BlogItems: BlogItemsType[] = [
         description:
             'Generate engaging Instagram Stories with ease using our AI-powered tool, which provides creative ideas, visual suggestions, and interactive elements tailored to your topic.',
         grouping: 'model',
-        link: 'instagram-story-ideas-generator',
-        title: 'Instagram Story Ideas Generator',
+        link: 'instagram-engagement-boost-strategies',
+        title: 'Instagram Engagement Boost Strategies',
         page_title:
-            'Elevate Your Instagram Presence with the Instagram Story Ideas Generator'
+            'Unlock actionable strategies to boost your Instagram engagement with detailed plans and best practices tailored to your content and metrics.'
     })
 ]
 
