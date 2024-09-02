@@ -1,7 +1,7 @@
 'use client'
 
 import { AuthTypes } from '@/types/auth'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
     createContext,
     Dispatch,
@@ -42,6 +42,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     })
     const [loading, setLoading] = useState<boolean>(true)
     const router = useRouter()
+    const pathname = usePathname()
 
     useEffect(() => {
         const request = async () => {
@@ -64,7 +65,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
                     })
                     setLoading(false)
                 } else {
-                    router.push('/')
+                    if (pathname.includes('/dashboard')) router.push('/')
                     setTimeout(() => setLoading(false), 1000)
                 }
             } catch (error) {}

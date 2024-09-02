@@ -1,37 +1,50 @@
 'use client'
 
 import BotCards from '@/components/botCards'
-import { Container, Display } from '@/components/display'
+import { Container, Display, Grid } from '@/components/display'
 import LoadingBots from '@/components/loadingBots'
 import TextComponent from '@/components/text'
 import { useAuth } from '@/contexts/authProvider'
 import { useChatModel } from '@/contexts/chat_model'
 import { BotTypes } from '@/types/bot'
-import { Models } from '@/types/chat_model'
 import TemplatesAI from '@/utils/AI/Templates'
 import {
     Button,
-    Card,
-    CardFooter,
-    CardHeader,
-    Image,
-    Skeleton,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
     Spinner,
+    Switch,
+    useDisclosure,
     User
 } from '@nextui-org/react'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { BsStars } from 'react-icons/bs'
+import { CgLogOut } from 'react-icons/cg'
+import { IoSettings } from 'react-icons/io5'
 import Swal from 'sweetalert2'
 
 export default function Profile() {
     const { user, setUser, loading } = useAuth()
+    const { isOpen, onOpen, onOpenChange } = useDisclosure()
     const { chatModel } = useChatModel()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isLoadingBots, setIsLoadingBots] = useState<boolean>(true)
     const [bots, setBots] = useState<BotTypes[]>([])
+    const [settingItems, setSettingItems] = useState([
+        {
+            name: 'answer AI Persian',
+            is: false
+        },
+        {
+            name: 'Hide Profile',
+            is: false
+        }
+    ])
     const router = useRouter()
-    const pathname = usePathname()
 
     useEffect(() => {
         if (loading) return
@@ -83,8 +96,8 @@ export default function Profile() {
             setUser({ ...user, email: '' })
 
             Swal.fire({
-                title: 'Auto close alert!',
-                html: 'I will close in <b></b> milliseconds.',
+                title: 'Success',
+                html: 'You Logout From ContentGleam',
                 timer: 2000,
                 timerProgressBar: true,
                 didOpen: () => {
@@ -102,26 +115,63 @@ export default function Profile() {
         }
     }
 
-    const handleLink = (model_name: Models) => {
-        if (chatModel && chatModel.models && chatModel.models.length !== 0) {
-            const findChatId = chatModel.models.find(
-                (model) => model.model_name === model_name
+    const handleSettingChange = (name: string) => {
+        setSettingItems((prevItems) =>
+            prevItems.map((item) =>
+                item.name === name ? { ...item, is: !item.is } : item
             )
-
-            if (findChatId) {
-                return `chat/${findChatId.chatId}`
-            }
-        }
-
-        return `chat?model=${model_name}`
+        )
     }
 
     return (
         <Display
             role="main"
-            className="mt-16 flex items-center justify-center transition-all max-sm:mt-12">
+            className="mt-16 flex items-center justify-center transition-all max-sm:mt-5">
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                Setting
+                            </ModalHeader>
+                            <ModalBody>
+                                <Grid grid_cols={2} className="w-full">
+                                    {settingItems.map((item, index) => {
+                                        return (
+                                            <Switch
+                                                isSelected={item.is}
+                                                onValueChange={() =>
+                                                    handleSettingChange(
+                                                        item.name
+                                                    )
+                                                }
+                                                key={index}
+                                                defaultSelected
+                                                color="secondary">
+                                                {item.name}
+                                            </Switch>
+                                        )
+                                    })}
+                                </Grid>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}>
+                                    Close
+                                </Button>
+                                <Button color="primary" onPress={onClose}>
+                                    Save
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+
             <Container className="w-[75%] h-[85vh] p-1 flex-col rounded-lg max-sm:h-[78vh] max-sm:w-[95%] bg-purple-800/40">
-                <Container className="w-full flex-col h-[75vh] max-sm:h-[65vh] p-2">
+                <Container className="w-full flex-col h-[75vh] max-sm:h-[70vh] p-2">
                     <div className="border-b-2 pb-3 w-full h-fit flex justify-between items-center">
                         <User
                             name={user.email}
@@ -130,19 +180,19 @@ export default function Profile() {
                                 src: 'https://avatars.githubusercontent.com/u/30373425?v=4'
                             }}
                         />
-                        <div className="bg-black/10 rounded-lg p-2">
+                        <Container
+                            justify="center"
+                            alignItems="center"
+                            className="bg-black/10 rounded-lg p-2">
                             <TextComponent
-                                message={`Points: <blue-200>${user.point.points}</blue-200>`}
+                                message={`<blue-200>${user.point.points}</blue-200>`}
                             />
-                        </div>
+                            <BsStars className="ml-2 max-sm:ml-1" />
+                        </Container>
                     </div>
 
                     <Container flexDecoration="col">
-                        <div className="mt-2">
-                            <h3>Bot Usage:</h3>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-12 rounded-lg p-5 bg-black/10 justify-items-center mt-5 w-full overflow-auto hide_scrollbar max-h-[50vh] max-xl:grid-cols-1 max-xl:gap-10 max-xl:p-2">
+                        <div className="grid grid-cols-2 gap-12 rounded-lg p-5 bg-black/10 justify-items-center mt-5 w-full overflow-auto hide_scrollbar max-h-[60vh] max-sm:max-h-[55vh] max-xl:grid-cols-1 max-xl:gap-10 max-xl:p-2">
                             {isLoadingBots ? (
                                 <LoadingBots />
                             ) : (
@@ -152,11 +202,7 @@ export default function Profile() {
                                             chatModel={chatModel}
                                             item={item}
                                             index={index}
-                                            key={
-                                                Math.floor(
-                                                    Math.random() * index
-                                                ) + 2
-                                            }
+                                            key={index}
                                         />
                                     )
                                 })
@@ -167,21 +213,28 @@ export default function Profile() {
 
                 <Container className="flex items-center justify-around w-full h-[10vh]">
                     <Button
-                        className={`transition-all duration-400 ${
+                        className={`transition-all duration-400 flex items-center justify-center ${
                             isLoading ? 'bg-black' : 'bg-red-700'
                         }`}
                         isDisabled={isLoading}
                         onClick={handleLogout}>
-                        {isLoading ? <Spinner></Spinner> : 'Logout'}
+                        {isLoading ? (
+                            <Spinner></Spinner>
+                        ) : (
+                            <CgLogOut size={20} />
+                        )}
                     </Button>
-                    <Button
+                    <Button className="bg-purple-900" isDisabled>
+                        {<IoSettings size={20} className="text-white/80" />}
+                    </Button>
+                    {/* <Button
                         className={`transition-all duration-400 ${
                             isLoading ? 'bg-black' : 'bg-red-700'
                         }`}
                         isDisabled={isLoading}
                         onClick={handleLogout}>
                         {isLoading ? <Spinner></Spinner> : 'Delete Account'}
-                    </Button>
+                    </Button> */}
                     {/* <Button>Logout</Button> */}
                 </Container>
             </Container>

@@ -26,21 +26,13 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { BiSend } from 'react-icons/bi'
-import CryptoJS from 'crypto-js'
 import { GrConfigure } from 'react-icons/gr'
 import { useController } from '@/contexts/controllerContext'
-import { ConfigTypes } from '@/types/config'
-import { Enc } from '@/functions/token'
 import { EnumModels } from '@/enum/Models'
 import { Points } from '@/enum/Points'
 import { inputModels } from '@/utils/inputModels'
 import Swal from 'sweetalert2'
-
-const generateToken = () => {
-    const timestamp = new Date().toISOString()
-    const token = Enc(timestamp, process.env.NEXT_PUBLIC_SECRET_KEY || '')
-    return token
-}
+import { Enc } from '@/functions/token'
 
 const SearchBars = () => {
     const [findBot, setFindBot] = useState<BotTypes | undefined>()
@@ -54,13 +46,19 @@ const SearchBars = () => {
     const {
         textValue,
         setTextValue,
-        setPromote,
+        setPrompt,
         isLoadingResponse,
         setIsLoadingResponse
     } = useChat()
     const { user } = useAuth()
     const searchParams = useSearchParams()
     const router = useRouter()
+
+    const generateToken = () => {
+        const timestamp = new Date().toISOString()
+        const token = Enc(timestamp, process.env.NEXT_PUBLIC_SECRET_KEY || '')
+        return token
+    }
 
     const model = searchParams.get('model') as Models
 
@@ -120,7 +118,7 @@ const SearchBars = () => {
                     : data
             )
             router.push(`/dashboard/chat/${json.chatId}`)
-            setPromote(textValue)
+            setPrompt(textValue)
         } else {
             const Toast = Swal.mixin({
                 toast: true,
@@ -388,22 +386,10 @@ const SearchBars = () => {
                                         'bg-black/90 data-[focus=true]:bg-black absolute bottom-1 w-[90%]',
                                     base: 'flex items-center justify-center bg-transparent'
                                 }}
-                                value={
-                                    model !== 'advanced-youtube-optimized-video'
-                                        ? textValue
-                                        : configSelect['video_topic'] || ''
-                                }
-                                onChange={(e) => {
-                                    if (
-                                        model ===
-                                        'advanced-youtube-optimized-video'
-                                    ) {
-                                        handleChange(e, 'video_topic')
-                                        return
-                                    }
-
+                                value={textValue}
+                                onChange={(e) =>
                                     setTextValue(e.target.value as string)
-                                }}
+                                }
                             />
                         </div>
                     </div>

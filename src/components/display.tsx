@@ -99,7 +99,7 @@ const Grid: React.FC<GridProps> = ({
             className={classNames(
                 className,
                 `w-full h-fit grid gap-10 grid-cols-${grid_cols} grid-flow-${grid_flow} place-items-${place_items} place-content-${place_content} justify-items-${justify_items} text-white p-2`,
-                'max-sm:w-[97%] max-sm:text-wrap max-sm:whitespace-break-spaces max-sm:ml-auto max-sm:mr-auto max-sm:h-svh *:blog',
+                'max-sm:w-[97%] max-sm:text-wrap max-sm:whitespace-break-spaces max-sm:ml-auto max-sm:mr-auto *:blog',
                 'max-sm:grid-cols-1 max-sm:gap-x-6 max-sm:gap-y-10'
             )}
             {...rest}>

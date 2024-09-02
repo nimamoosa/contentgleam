@@ -5,8 +5,6 @@ export const POST = async (request: NextRequest) => {
     const { userId }: { userId: string } = await request.json()
     const cookies = request.cookies.get('session')
 
-    console.log(userId)
-
     if (!cookies?.value)
         return NextResponse.json({ message: 'No User Found' }, { status: 400 })
 

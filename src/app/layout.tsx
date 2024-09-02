@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     description: 'Generated AI Content',
     keywords:
         'AI content generation, AI writing tools, automated content creation, AI content creator, content marketing, SEO content, blog writing AI, social media content, content automation, AI-driven content, machine learning content creation, GPT-4 content, AI image generation, creative AI, content optimization, digital marketing, AI content platform, online content tools, smart content creation, AI-powered content, content generation software',
-    manifest: 'https://contentgleam.vercel.app/manifest.json',
+    manifest: 'https://contentgleam.vercel.app/manifest-v2.json',
     openGraph: {
         title: 'Content Gleam',
         description: 'Generated AI Content',

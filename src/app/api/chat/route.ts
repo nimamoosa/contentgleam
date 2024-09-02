@@ -7,10 +7,12 @@ interface props {
     enc: string
 }
 
+const SecretKey = process.env.NEXT_PUBLIC_SECRET_KEY || ''
+
 export const POST = async (request: NextRequest) => {
     const { enc }: props = await request.json()
 
-    const des = Dec(enc, process.env.NEXT_PUBLIC_SECRET_KEY || '')
+    const des = Dec(enc, SecretKey)
 
     if (des.status == 'error') {
         return NextResponse.json({ message: 'Forbidden' }, { status: 403 })

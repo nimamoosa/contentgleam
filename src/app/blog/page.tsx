@@ -129,7 +129,7 @@ const BlogPage = () => {
                 {paginatedItems.length > 0 ? (
                     paginatedItems.map((item, index) => (
                         <article key={index} className="mb-10">
-                            <Card className="max-w-[400px] max-h-[700px] ring-2 bg-stripe-gradient transition-all duration-300 ease-soft-spring bg-purple-600/10">
+                            <Card className="w-[400px] max-sm:w-[330px] max-h-[450vh] ring-2 bg-stripe-gradient transition-all duration-300 ease-soft-spring bg-purple-600/10">
                                 <CardHeader className="flex gap-3 items-center justify-center">
                                     <Link
                                         href={`blog/${item.link}`}
@@ -143,9 +143,7 @@ const BlogPage = () => {
                                         <Image
                                             loading="lazy"
                                             src={`/posts/${item.link}.png`}
-                                            width={600}
-                                            height={340}
-                                            className="shadow-lg max-sm:max-h-[280px] shadow-transparent/50"
+                                            className="shadow-lg w-[600px] h-[340px] object-cover max-sm:w-[450px] max-sm:max-h-[240px] shadow-transparent/50"
                                         />
                                     </div>
                                     <div className="text-default-500 text-large font-normal mt-4 w-full overflow-y-auto text-start">
@@ -189,7 +187,7 @@ const BlogPage = () => {
                                             as={Link}
                                             href={`blog/${item.link}`}
                                             className="w-[90%]">
-                                            خوندن این مقاله
+                                            Read
                                         </Button>
                                     </div>
                                 </CardFooter>

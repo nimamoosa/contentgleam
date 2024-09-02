@@ -35,6 +35,7 @@ export default function InitResponseModel({
         <Container
             justify={item.role === 'user' ? 'end' : 'start'}
             alignItems="center"
+            aria-label="chat_container"
             id={item.messageId}
             flexDecoration="row"
             className={`p-2 mt-3 ${

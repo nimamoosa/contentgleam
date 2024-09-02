@@ -18,8 +18,8 @@ interface ChatContextProps {
     setTextValue: Dispatch<SetStateAction<string>>
     chats: ChatTypes[]
     setChats: Dispatch<SetStateAction<ChatTypes[]>>
-    promote: string
-    setPromote: Dispatch<SetStateAction<string>>
+    prompt: string
+    setPrompt: Dispatch<SetStateAction<string>>
     isLoadingResponse: boolean
     setIsLoadingResponse: Dispatch<SetStateAction<boolean>>
     isLoadingChat: boolean
@@ -31,8 +31,8 @@ const ChatContext = createContext<ChatContextProps>({
     setTextValue: () => {},
     chats: [],
     setChats: (): ChatTypes[] => [],
-    promote: '',
-    setPromote: () => {},
+    prompt: '',
+    setPrompt: () => {},
     isLoadingResponse: false,
     setIsLoadingResponse: () => {},
     isLoadingChat: true,
@@ -43,7 +43,7 @@ export default function ChatProvider({ children }: { children: ReactNode }) {
     const [textValue, setTextValue] = useState<string>('')
     const [chats, setChats] = useState<ChatTypes[]>([])
     const [isLoadingChat, setIsLoadingChat] = useState<boolean>(true)
-    const [promote, setPromote] = useState<string>('')
+    const [prompt, setPrompt] = useState<string>('')
     const [isLoadingResponse, setIsLoadingResponse] = useState<boolean>(false)
     const { user } = useAuth()
 
@@ -76,8 +76,8 @@ export default function ChatProvider({ children }: { children: ReactNode }) {
                 setTextValue,
                 chats,
                 setChats,
-                promote,
-                setPromote,
+                prompt,
+                setPrompt,
                 isLoadingResponse,
                 setIsLoadingResponse,
                 isLoadingChat,

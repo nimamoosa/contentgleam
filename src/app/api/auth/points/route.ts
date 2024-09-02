@@ -18,17 +18,16 @@ export const POST = async (request: NextRequest) => {
     const cookies = request.cookies.get('session')
 
     // Check if request is from an allowed origin
-    // if (
-    //     origin !== ALLOWED_ORIGIN &&
-    //     referer &&
-    //     !referer.startsWith(ALLOWED_ORIGIN)
-    // ) {
-    //     console.log(origin, referer.startsWith(ALLOWED_ORIGIN))
-    //     return NextResponse.json(
-    //         { message: 'Forbidden Request' },
-    //         { status: 403 }
-    //     )
-    // }
+    if (
+        origin !== ALLOWED_ORIGIN &&
+        referer &&
+        !referer.startsWith(ALLOWED_ORIGIN)
+    ) {
+        return NextResponse.json(
+            { message: 'Forbidden Request' },
+            { status: 403 }
+        )
+    }
 
     // Verify authorization header
 
@@ -97,8 +96,6 @@ export const POST = async (request: NextRequest) => {
             { status: 403 }
         )
     }
-
-    console.log('val', cookies?.value)
 
     const { e }: { e: Models } = await request.json()
 

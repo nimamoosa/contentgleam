@@ -36,82 +36,86 @@ export default function Home() {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if (!validatePassword(password)) {
-            setError(
-                'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.'
-            )
-            return
-        }
+        try {
+            if (!validatePassword(password)) {
+                setError(
+                    'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.'
+                )
+                return
+            }
 
-        if (error !== '') return
+            if (error !== '') return
 
-        setIsLoading(true)
+            setIsLoading(true)
 
-        const response = await fetch('/api/auth', {
-            method: 'POST',
-            body: JSON.stringify({ email, password }),
-            headers: { 'Content-Type': 'application/json' }
-        })
-        const json = await response.json()
-        const data = json.data
-
-        if (response.status === 201) {
-            setUser({
-                email: data.email,
-                password: data.password,
-                role: data.role,
-                point: {
-                    points: data.point.points || 30
-                },
-                userId: data.userId
+            const response = await fetch('/api/auth', {
+                method: 'POST',
+                body: JSON.stringify({ email, password }),
+                headers: { 'Content-Type': 'application/json' }
             })
+            const json = await response.json()
+            const data = json.data
 
-            Swal.fire({
-                icon: 'success',
-                title: 'Sign Up Successfully',
-                text: 'You have successfully signed up.',
-                timer: 3000,
-                timerProgressBar: true
-            }).then(() => {
-                router.push('/dashboard')
-            })
-        } else if (response.status === 200) {
-            setUser({
-                email: email,
-                password: password,
-                role: data.role || 'user',
-                point: {
-                    points: data.point.points || 30
-                },
-                userId: data.userId
-            })
+            if (response.status === 201) {
+                setUser({
+                    email: data.email,
+                    password: data.password,
+                    role: data.role,
+                    point: {
+                        points: data.point.points || 30
+                    },
+                    userId: data.userId
+                })
 
-            Swal.fire({
-                icon: 'success',
-                title: 'Login Successfully',
-                text: 'You have successfully logged in.',
-                timer: 3000,
-                timerProgressBar: true
-            }).then(() => {
-                router.push('/dashboard')
-            })
-        } else {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer
-                    toast.onmouseleave = Swal.resumeTimer
-                }
-            })
-            Toast.fire({
-                icon: 'error',
-                title: json.message
-            })
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sign Up Successfully',
+                    text: 'You have successfully signed up.',
+                    timer: 3000,
+                    timerProgressBar: true
+                }).then(() => {
+                    router.push('/dashboard')
+                })
+            } else if (response.status === 200) {
+                setUser({
+                    email: email,
+                    password: password,
+                    role: data.role || 'user',
+                    point: {
+                        points: data.point.points || 30
+                    },
+                    userId: data.userId
+                })
 
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Login Successfully',
+                    text: 'You have successfully logged in.',
+                    timer: 3000,
+                    timerProgressBar: true
+                }).then(() => {
+                    router.push('/dashboard')
+                })
+            } else {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer
+                        toast.onmouseleave = Swal.resumeTimer
+                    }
+                })
+                Toast.fire({
+                    icon: 'error',
+                    title: json.message
+                })
+
+                setIsLoading(false)
+            }
+        } catch (error) {
             setIsLoading(false)
         }
     }

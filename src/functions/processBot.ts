@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction } from 'react'
-import { EncJET } from './token'
 import { ChatTypes } from '@/types/chat'
 import postChatData from './chatData'
 import { AuthUser } from '@/types/auth'
 import handleErrorResponse from './handleError'
 import updateUserPoints from './point'
+import { EncJET } from './token'
 
 export default async function processBotResponse(
     prompt: string,

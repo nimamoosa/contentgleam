@@ -1,6 +1,6 @@
 'use client'
 
-import { Container, Display, Fixed } from '@/components/display'
+import { Container, Display } from '@/components/display'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/authProvider'
@@ -24,11 +24,10 @@ import {
 } from '@nextui-org/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
-import { BsInstagram, BsTelegram } from 'react-icons/bs'
-import StarsBackground from '@/components/dots'
-import BackgroundSwitcher from '@/components/backgroundSwitcher'
+import { BsTelegram } from 'react-icons/bs'
 import { BiBell } from 'react-icons/bi'
 import TextComponent from '@/components/text'
+import { Metadata } from 'next'
 
 export default function DashboardLayout({
     children
@@ -40,7 +39,18 @@ export default function DashboardLayout({
     const { isOpen, onOpen, onOpenChange } = useDisclosure()
     const pathname = usePathname()
 
-    const menuItems = ['Profile']
+    const menuItems = [
+        {
+            name: 'Profile',
+            dash: true,
+            link: 'profile'
+        },
+        {
+            name: 'Blog',
+            dash: false,
+            link: 'blog'
+        }
+    ]
 
     const supportItems = [
         {
@@ -121,8 +131,8 @@ export default function DashboardLayout({
             </div>
 
             <AnimatePresence>
-                {loading && (
-                    <motion.div
+                {loading ? (
+                    <motion.section
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -137,7 +147,9 @@ export default function DashboardLayout({
                                 </Spinner>
                             </Container>
                         </Container>
-                    </motion.div>
+                    </motion.section>
+                ) : (
+                    <></>
                 )}
             </AnimatePresence>
 
@@ -174,56 +186,58 @@ export default function DashboardLayout({
             </Modal>
 
             <Container flexDecoration="col" className="w-full h-full">
-                {pathname.startsWith('/dashboard/doc') ||
-                pathname.startsWith('/dashboard/blog/') ? (
-                    <></>
-                ) : (
-                    <Container className="w-[100%] h-[10vh] fixed right-0 z-50">
-                        <Navbar
-                            onMenuOpenChange={setIsMenuOpen}
-                            classNames={{
-                                base: 'bg-black/30 w-full backdrop-filter backdrop-blur-sm'
-                            }}>
-                            <NavbarContent>
-                                <NavbarMenuToggle
-                                    aria-label={
-                                        isMenuOpen ? 'Close menu' : 'Open menu'
-                                    }
-                                    className="sm:hidden"
-                                />
-                                <NavbarBrand>
-                                    {/* <AcmeLogo /> */}
-                                    <p className="font-bold text-inherit">
-                                        ContentGleam AI
-                                    </p>
-                                </NavbarBrand>
-                            </NavbarContent>
+                <Container className="w-[100%] h-[10vh] fixed right-0 z-50">
+                    <Navbar
+                        onMenuOpenChange={setIsMenuOpen}
+                        isMenuOpen={isMenuOpen}
+                        classNames={{
+                            base: 'bg-black/30 w-full backdrop-filter backdrop-blur-sm'
+                        }}>
+                        <NavbarContent>
+                            <NavbarMenuToggle
+                                aria-label={
+                                    isMenuOpen ? 'Close menu' : 'Open menu'
+                                }
+                                className="sm:hidden"
+                            />
+                            <NavbarBrand>
+                                {/* <AcmeLogo /> */}
+                                <p className="font-bold text-inherit">
+                                    ContentGleam AI
+                                </p>
+                            </NavbarBrand>
+                        </NavbarContent>
 
-                            <NavbarContent
-                                className="hidden sm:flex gap-4"
-                                justify="center">
-                                <NavbarItem>
-                                    <NextUILink
-                                        href="/dashboard/profile"
-                                        aria-current="page">
-                                        Profile
-                                    </NextUILink>
-                                </NavbarItem>
-                            </NavbarContent>
-                            <NavbarContent justify="end">
-                                {supportItems.map((item, index) => {
+                        <NavbarContent
+                            className="hidden sm:flex gap-4"
+                            justify="center">
+                            <NavbarItem>
+                                {menuItems.map((item, index) => {
                                     return (
-                                        <NavbarItem key={index}>
-                                            <NextUILink
-                                                target="_blank"
-                                                href={item.href}
-                                                className="flex items-center justify-center px-2 py-1 rounded-lg text-black bg-purple-100">
-                                                <span>{item.name}</span>
-                                                <span className="ml-1">
-                                                    {item.icon}
-                                                </span>
-                                            </NextUILink>
-                                            {/* <Button
+                                        <NextUILink
+                                            key={index}
+                                            href={`/dashboard/${item.link}`}
+                                            aria-current="page">
+                                            {item.name}
+                                        </NextUILink>
+                                    )
+                                })}
+                            </NavbarItem>
+                        </NavbarContent>
+                        <NavbarContent justify="end">
+                            {supportItems.map((item, index) => {
+                                return (
+                                    <NavbarItem key={index}>
+                                        <NextUILink
+                                            target="_blank"
+                                            href={item.href}
+                                            className="flex items-center justify-center px-2 py-1 rounded-lg text-black bg-purple-100">
+                                            <span>{item.name}</span>
+                                            <span className="ml-1">
+                                                {item.icon}
+                                            </span>
+                                        </NextUILink>
+                                        {/* <Button
                       className="flex items-center justify-center bg-green-600 text-black/90"
                       as={Link}
                       href={item.href}
@@ -231,43 +245,44 @@ export default function DashboardLayout({
                     >
                       {""}
                     </Button> */}
-                                        </NavbarItem>
-                                    )
-                                })}
+                                    </NavbarItem>
+                                )
+                            })}
 
-                                <NavbarItem>
-                                    <button
-                                        className="bg-default-200 rounded-lg text-[20px] p-2 transition-all hover:scale-[1.1]"
-                                        aria-labelledby="button_"
-                                        onClick={onOpen}>
-                                        <BiBell />
-                                    </button>
-                                </NavbarItem>
-                            </NavbarContent>
-                            <NavbarMenu>
-                                {menuItems.map((item, index) => (
-                                    <NavbarMenuItem
-                                        className="mt-10"
-                                        key={`${item}-${index}`}>
-                                        <Link
-                                            color={
-                                                index === 2
-                                                    ? 'primary'
-                                                    : index ===
-                                                      menuItems.length - 1
-                                                    ? 'danger'
-                                                    : 'foreground'
-                                            }
-                                            className="w-full"
-                                            href="/dashboard/profile">
-                                            {item}
-                                        </Link>
-                                    </NavbarMenuItem>
-                                ))}
-                            </NavbarMenu>
-                        </Navbar>
-                    </Container>
-                )}
+                            <NavbarItem>
+                                <button
+                                    className="bg-default-200 rounded-lg text-[20px] p-2 transition-all hover:scale-[1.1]"
+                                    aria-labelledby="button_"
+                                    onClick={onOpen}>
+                                    <BiBell />
+                                </button>
+                            </NavbarItem>
+                        </NavbarContent>
+                        <NavbarMenu>
+                            {menuItems.map((item, index) => (
+                                <NavbarMenuItem
+                                    className="mt-10"
+                                    key={`${item}-${index}`}>
+                                    <Link
+                                        color={
+                                            index === 2
+                                                ? 'primary'
+                                                : index === menuItems.length - 1
+                                                ? 'danger'
+                                                : 'foreground'
+                                        }
+                                        className="w-full"
+                                        onClick={() => setIsMenuOpen(false)}
+                                        href={`${
+                                            item.dash ? '/dashboard' : ''
+                                        }/${item.link}`}>
+                                        {item.name}
+                                    </Link>
+                                </NavbarMenuItem>
+                            ))}
+                        </NavbarMenu>
+                    </Navbar>
+                </Container>
 
                 <Container
                     className="relative z-10 w-full min-h-[100vh] bg-fixed bg-blend-multiply bg-stripe-gradient-2 from-blue-900 via-violet-950/40 to-purple-600/40"

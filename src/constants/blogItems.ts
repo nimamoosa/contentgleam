@@ -17,7 +17,7 @@ const BlogItems: BlogItemsType[] = [
         description: 'youtube seo optimizer for youtube video',
         grouping: 'model',
         link: 'youtube-seo-optimizer',
-        title: 'Youtube Tags Generator',
+        title: 'Youtube Seo Optimizer',
         page_title:
             "YouTube SEO Optimizer: Enhance Your Video's Visibility with AI-Driven Optimization"
     }),

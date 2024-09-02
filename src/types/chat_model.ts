@@ -1,7 +1,6 @@
 export type Models =
     | 'youtube-tag'
     | 'youtube-seo-optimizer'
-    | 'youtube-seo-optimize-content'
     | 'advanced-youtube-optimized-video'
     | 'instagram-post-generator'
     | 'instagram-story-ideas-generator'

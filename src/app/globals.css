@@ -20,9 +20,9 @@ body::-webkit-scrollbar {
     width: 0;
 }
 
-* {
+/* * {
     user-select: none;
-}
+} */
 
 @layer utilities {
     .hide_scrollbar::-webkit-scrollbar {
@@ -49,5 +49,14 @@ body::-webkit-scrollbar {
             transparent 75%,
             transparent
         );
+    }
+
+    .transition-transform {
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+
+    .transform-opacity {
+        transform: translateY(20px);
+        opacity: 0;
     }
 }

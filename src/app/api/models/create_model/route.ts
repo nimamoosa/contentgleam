@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { ApiUrl } from '../../utils/apiUrl'
 import jwt from 'jsonwebtoken'
 import CryptoJS from 'crypto-js'
-import { Dec } from '@/functions/token'
 import getClientInfo from '../../utils/clientInfo'
+import { Dec } from '@/functions/token'
 
 interface props {
     enc: string
@@ -94,8 +94,6 @@ export const POST = async (request: NextRequest) => {
             { status: 200 }
         )
     }
-
-    // console.log(first)
 
     return NextResponse.json(json, { status: response.status })
 }

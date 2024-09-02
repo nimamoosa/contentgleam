@@ -32,7 +32,7 @@ export default function BotCards({
     return (
         <Card
             isFooterBlurred
-            className={`w-[85%] h-[300px] ring-2 hover:scale-[1.05]`}
+            className={`w-[85%] h-[300px] max-sm:w-[95%] ring-2 hover:scale-[1.05]`}
             key={index}>
             <CardHeader className="absolute z-10 top-1 flex-col items-start">
                 <p className="text-tiny text-white/60 uppercase font-bold">
